@@ -1,0 +1,94 @@
+/* style pour le conteneur de formulaire */
+.form-container {
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  /* style pour les titres de formulaire */
+  .form-container h2 {
+    display: flex;
+    align-items: center;
+    margin-top: 0;
+  }
+  
+  /* style pour les icones de formulaire */
+  .form-icon {
+    margin-right: 10px;
+  }
+  
+  /* style pour les groupes de formulaire */
+  .form-group {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  
+  /* style pour les icones de groupe de formulaire */
+  .form-group .form-icon {
+    margin-right: 10px;
+  }
+  
+  /* style pour les champs de formulaire */
+  .form input, .form select {
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+    width: 100%;
+  }
+  
+  /* style pour le bouton de soumission */
+  .submit-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #3f51b5;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 5px;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  /* style pour les icones de bouton de soumission */
+  .submit-btn mat-icon {
+    margin-right: 10px;
+  }
+  
+  /* style pour les conteneurs de dons */
+  .donation-container {
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+  }
+  
+  /* style pour les titres de don */
+  .donation-container h3 {
+    display: flex;
+    align-items: center;
+    margin-top: 0;
+    cursor: pointer;
+  }
+  
+  /* style pour les icones de don */
+  .donation-container h3 mat-icon {
+    margin-right: 10px;
+  }
+  
+  /* style pour les descriptions de don */
+  .donation-container p {
+    margin: 0;
+    font-size: 16px;
+  }
+  
+  /* style pour les groupes de formulaire de don */
+  .donation-container .form-group {
+    margin-bottom: 0;
+  }
+  

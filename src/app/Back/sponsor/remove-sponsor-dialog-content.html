@@ -1,0 +1,10 @@
+<h2 mat-dialog-title>Supprimer un sponsor</h2>
+<mat-dialog-content class="mat-typography">
+  <h3>Êtes-vous sûr de vouloir supprimer ce sponsor ?</h3>
+  <p>Cliquez sur le bouton Supprimer pour confirmer. Cette action est irréversible</p>
+
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-stroked-button mat-dialog-close>Annuler</button>
+  <button mat-stroked-button color="warn" [mat-dialog-close]="true" cdkFocusInitial>Supprimer</button>
+</mat-dialog-actions>

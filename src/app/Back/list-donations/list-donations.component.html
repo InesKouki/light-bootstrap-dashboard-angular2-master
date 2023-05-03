@@ -1,0 +1,128 @@
+<section class="banner-area banner-area2 blog-page text-center">
+  <div class="container">
+      <div class="row">
+          <div class="col-lg-12">
+              <h1><i>Welcome to Our App</i></h1>
+              <h2><a href="/">Home </a> &nbsp;/&nbsp; <a >logout</a></h2>
+          </div>
+      </div>
+  </div>
+</section>
+
+
+<div class="main-content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="header">
+                        
+                        <h4 class="title">Striped Table with Hover</h4>
+                        <p class="category">Here is a subtitle for this table</p>
+                        <button class="custom-btn" (click)="downloadExcel()">
+                          <span class="btn-text">Télécharger le PDF</span>
+                        </button>
+                        
+                        <button class="custom-btn" routerLink="/addDon">
+                          <span class="btn-text">Ajouter Donations</span>
+                        </button>
+                    <div class="content table-responsive table-full-width">
+                          <table class="table table-hover table-striped">
+                                <thead>
+                                    <tr>
+                                        <th scope="col" > <strong>date </strong></th>  
+                                        <th scope="col"><strong>description</strong></th>
+                                        <th scope="col"><strong>Quantite</strong></th>
+                                        <th scope="col"><strong>Suivi</strong></th>
+                                        <!-- <th scope="col"><strong>Mon contrat</strong></th> -->
+                                        <th scope="col"><strong>Actions</strong></th>
+                                      </tr>
+                                </thead>
+                                <tbody>
+       
+                                    <tr *ngFor="let row of donations">
+                                     <td (click)="onDonationClick(row.id)" >{{row.date}}</td> 
+                                       
+                                        <!-- <td >{{this.row.id}}</td> -->
+                                        <td >{{this.row.description}}</td>
+                                        <td >{{this.row.quantite}}</td>
+                                      
+                                        <td>
+                                            <mat-icon *ngIf="row.suivi" class="status-true" (click)="updateDonationStatus(row.id)" >check_circle</mat-icon>
+                                            <mat-icon *ngIf="!row.suivi" class="status-false" (click)="updateDonationStatus(row.id)">cancel</mat-icon>
+                                          </td>
+                                          <td>
+                                            <div *ngIf="showAssociations[row.id]">
+                                              <select [(ngModel)]="selectedAssociation[row.id]">
+                                                <option *ngFor="let association of associations" [ngValue]="association">{{ association.nom }}</option>
+                                              </select>
+                                              <!-- <button mat-raised-button color="primary" (click)="assignAssociation(row.id)" routerLink="/listDon">Assign</button> -->
+                                              <button mat-raised-button color="primary"(click)="assignAssociation(row.id)" routerLink="/listDon">
+                                                <mat-icon mat-icon-button-size="small">assignment</mat-icon>  
+                                                
+                                              </button>
+                                            </div>
+                                          </td>
+                                         <td>
+                                          <button mat-icon-button matTooltip="Delete event" color="warn" class="custom-style" (click)="deleteDonations(row.id)">
+                                            <mat-icon>delete_forever</mat-icon>
+                                          </button>
+                                         </td>
+                                          
+                                          <!-- <td>
+                                            <mat-form-field appearance="fill">
+                                              <mat-select [(value)]="row.association.id" (selectionChange)="assignAssociationToDonation(row.id, row.association.id)">
+                                                <mat-option *ngFor="let assoc of associations" [value]="assoc.id">{{ assoc.nom }}</mat-option>
+                                              </mat-select>
+                                            </mat-form-field>
+                                          </td> -->
+                                        <!-- <td>
+                                            <button mat-icon-button matTooltip="Supprimer l'evenement" color="warn" (click)="deleteAssociation(this.row.id)">
+                                                <mat-icon>delete_forever</mat-icon>
+                                              </button>
+                                        </td>
+                                        <td>
+                                            <button mat-icon-button matTooltip="Modifier l'evenement" (click)="openDialogUpdateAssociation(this.row.id)" color="primary">
+                                                <mat-icon>edit</mat-icon>
+                                             </button>
+                                        </td>
+                                        -->
+                                       
+
+                                    </tr>
+                                </tbody>
+                          </table>
+
+                    </div>
+                    <div *ngFor="let association of association">
+                      <p>{{ association[0] }}: {{ association[1] }}</p>
+                    </div>
+                    <div class="association-list">
+                     
+                    </div>
+                    <h2>List of Donations</h2>
+    <ul>
+      <li *ngFor="let donation of donations" (click)="assignAssociation(donation.id)">
+       
+      </li>
+      <!-- <div *ngFor="let donation of donations">
+        <h3>Donation {{ donation.id }}</h3>
+        <p>{{ donation.description }}</p>
+        <button (click)="loadAssociations(donation)">Assign Association</button>
+        <div *ngIf="showAssociations[donation.id]">
+          <select [(ngModel)]="selectedAssociation[donation.id]">
+            <option *ngFor="let association of associations" [ngValue]="association">{{ association.nom }}</option>
+          </select>
+          <button (click)="assignAssociation(donation)">Assign</button>
+        </div>
+      </div> -->
+      <!-- <div *ngFor="let donation of donations">
+        <h3 (click)="onDonationClick(donation.id)">Donation {{ donation.id }}</h3>
+        <p>{{ donation.description }}</p>
+        <div *ngIf="showAssociations[donation.id]">
+          <select [(ngModel)]="selectedAssociation[donation.id]">
+            <option *ngFor="let association of associations" [ngValue]="association">{{ association.nom }}</option>
+          </select>
+          <button (click)="assignAssociation(donation.id)">Assign</button>
+        </div>
+      </div> -->

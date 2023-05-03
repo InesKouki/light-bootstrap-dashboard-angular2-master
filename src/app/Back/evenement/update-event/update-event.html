@@ -1,0 +1,51 @@
+ <h1 mat-dialog-title>Modifier les informations sur cet evenement</h1>
+<mat-dialog-content class="mat-typography" style="overflow: hidden;height: 400px;">
+       <form [formGroup]="updateEventForm" (submit)="submit()">
+        <p><strong>Étape 1:</strong> Modifiez le titre de votre Event</p>
+
+        <mat-form-field class="form-field" appearance="outline">
+          <mat-label> Nom de l'Event</mat-label>
+          <input matInput type="text" formControlName="nomEvent" placeholder="Entrez un nom à votre evenement" />
+        </mat-form-field>
+
+      
+
+        <p style="margin-top: 5px"><strong>Étape 2:</strong> Modifier la description de votre Event</p>
+
+        <mat-form-field class="form-field" appearance="outline">
+          <mat-label> Description du Event</mat-label>
+          <input matInput type="text" formControlName="description" placeholder="Entrez une description" />
+        </mat-form-field>
+
+        <p style="margin-top: 5px"><strong>Étape 3:</strong> Donnez un interval de temps à votre Event</p>
+        <mat-form-field appearance="fill">
+          <mat-label>Enter a date range</mat-label>
+          <mat-date-range-input [rangePicker]="picker">
+            <input matStartDate placeholder="Start date" formControlName="dateDebut">
+            <input matEndDate placeholder="End date" formControlName="dateFin">
+          </mat-date-range-input>
+          <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-date-range-picker #picker></mat-date-range-picker>
+        </mat-form-field>
+
+        <mat-form-field class="form-field" appearance="outline">
+          <mat-label> Nombre de place</mat-label>
+          <input matInput type="text" formControlName="nbrPlace" placeholder="Entrez le nombre de place" />
+        </mat-form-field>
+
+        <mat-form-field class="form-field" appearance="outline">
+          <mat-label> Prix de l'Event</mat-label>
+          <input matInput type="text" formControlName="prix" placeholder="Entrez le prix" />
+        </mat-form-field>
+
+        <mat-dialog-actions >
+          <button mat-raised-button color="primary" style="width: 100%;" [disabled]="updateEventForm.invalid" type="submit">Confirmer</button>
+
+        
+        </mat-dialog-actions>
+
+       </form>
+
+</mat-dialog-content>
+ 

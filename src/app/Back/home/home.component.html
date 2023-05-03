@@ -1,0 +1,65 @@
+<div class="main-content">
+    <h3>Statistiques sur la plateforme:</h3>
+          <div
+            class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative bg-light"
+            >
+            <div class="row spacerow">
+              <div class="col-md-6">
+
+                <mat-icon >work_outline </mat-icon>
+                <h4>
+                  
+                  {{stats.totalEvent}} Total Events
+                </h4>
+              </div>
+              <div class="col-md-6">
+                <mat-icon class="green-icon" style="vertical-align: middle; margin-right: 3px" >work_outline</mat-icon>
+                <h4>
+                 {{stats.ActivEvent}} Active Events
+                </h4>
+              </div>
+            </div>
+          
+          </div>
+</div>
+
+<div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative bg-light">
+    <div class="row spacerow">
+      <div class="col-md-4 user-stats">
+        <h4>
+          <mat-icon
+            color="primary"
+            style="vertical-align: middle; margin-right: 10px"
+            >people</mat-icon
+          > 
+         <span>{{ stats.totalEvent }} Events</span> 
+        </h4>
+        <h4>
+          <mat-icon
+            class="green-icon"
+            style="vertical-align: middle; margin-right: 3px"
+            >sentiment_very_satisfied</mat-icon>
+          {{ stats.ActivEvent }} Events active
+        </h4>
+      </div>
+
+      <div class="col-md-8"  >
+      
+
+        <div class="chart">
+          <canvas
+          baseChart
+          [labels]="labels"
+          [datasets]="pieChartData"
+          [type]="pieChartType"
+          [options]="pieChartOptions"
+
+        >
+        </canvas>
+        </div>
+      </div>
+    </div>
+</div>
+   
+  
+

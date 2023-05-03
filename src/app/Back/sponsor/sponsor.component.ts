@@ -1,0 +1,224 @@
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { FormBuilder, FormGroup, NgForm, Validators } from '@angular/forms';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
+import { SponsorService } from '../_services/sponsor.service';
+import { UpdateSponsorComponent } from './update-sponsor/update-sponsor.component';
+import { RemoveSponsorDialogContent } from './remove-sponsor-dialog-content';
+import { saveAs } from 'file-saver';
+import { environment } from 'environments/environment';
+
+@Component({
+  selector: 'app-sponsor',
+  templateUrl: './sponsor.component.html',
+  styleUrls: ['./sponsor.component.scss']
+})
+export class SponsorComponent implements OnInit {
+  BASE_URL = `${environment.apiBaseUrl}/sponsors/`;
+  displayedColumns: string[] = ['nomSponsor', 'description', 'debutContract', 'finContract','imageFile','actions'];
+  dataSource: MatTableDataSource<any>;
+
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild('formDirective1') private formDirective1: NgForm;
+  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild("myDiv") divView: ElementRef;
+  @ViewChild('fileInput') fileInput!: ElementRef;
+
+  sponsorSearch:any[];
+  sponsors: any[];
+  newForm: FormGroup;
+  details:any;
+  currentEvent = null;
+  currentIndex = -1;
+  titre = '';
+  panelOpenState = false;
+  step = 4;
+
+  constructor(
+    private SponsorService: SponsorService,
+    public dialog:MatDialog,
+    private _snackBar: MatSnackBar,
+    private formBuilder: FormBuilder,) {
+
+      this.dataSource = new MatTableDataSource();
+     
+
+      this.dataSource.filterPredicate = (data: any, filter: string) => {
+        
+        return  data.nomSponsor.toLocaleLowerCase().includes(filter) ||
+        data.description.toLocaleLowerCase().includes(filter) ||
+        data.debutContract.toLocaleLowerCase().includes(filter) ||
+        data.finContract.toLocaleLowerCase().includes(filter) ;
+        
+      }
+  }
+
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
+  }
+
+  ngAfterViewInit() {
+    this.divView.nativeElement.scrollIntoView();
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
+  }
+
+  ngOnInit(): void {
+    this.newForm = this.formBuilder.group({
+      nomSponsor: [null, Validators.required],
+      description: [null,Validators.required],
+      debutContract: [null, Validators.required],
+      finContract: [null,Validators.required],
+      fileName: [null, Validators.required]
+    });
+    this.getListSponsors();
+    
+  
+  }
+  setStep(index: number) {
+    this.step = index;
+  }
+
+  getListSponsors(){
+    this.SponsorService.getSponsorsList().subscribe((data: any) => {
+      this.sponsors=data;
+      this.dataSource.data = data;
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
+      return data;
+      
+     
+      });
+  }
+
+  getSponsorDetails(id) {
+    this.SponsorService.getSponsorDetails(id).subscribe((data: any) => {
+      this.details=data;
+      });
+  }
+  
+  imageURL: any;
+  public message :string;
+  userFile;
+  public imagePath;
+
+  onFileSelected(event: any) {
+    if (event.target.files.length> 0)
+    {
+      const file: File = event.target.files[0];
+      this.userFile = file;
+
+      var mimeType = event.target.files[0].type;
+      if (mimeType.match(/image\/*/)== null){
+        this.openErrorSnackBar('Only images are supported')
+        //this.message ="Only images are supported";
+        console.log(this.message);
+        return;
+      }
+      var reader = new FileReader();
+      this.imagePath =file;
+      reader.readAsDataURL(file);
+      reader.onload= (event) => {
+        this.imageURL = reader.result;
+      }
+    }
+    
+  }
+
+  submit() {
+    if (!this.newForm.valid) {
+      return;
+    }
+    if (this.newForm.valid) {
+      const formData = new FormData();
+      const sponsor = this.newForm.value;
+      formData.append('sponsor',JSON.stringify(sponsor));
+      formData.append('file',this.userFile);
+  
+    this.SponsorService.addSponsor(formData).subscribe(
+    data => {
+      this.openSuccessSnackBar('Sponsor ajoutée avec succès !')
+      this.getListSponsors();
+      
+    });
+    this.formDirective1.resetForm();
+    this.newForm.reset();
+    this.step=4;
+  }
+  }
+  
+
+
+  deleteSponsor(numSponsor) {
+    const dialogRef = this.dialog.open(RemoveSponsorDialogContent);
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === true) {
+        this.supprimerSponsor(numSponsor);
+      }
+    });
+  }
+
+  supprimerSponsor(numSponsor: any) {
+    this.SponsorService.deleteSponsor(numSponsor).subscribe(data => {
+      this.getListSponsors();
+    })
+  }
+  
+  openDialogUpdateSponsor(numSponsor) {
+    const dialogRef=this.dialog.open(UpdateSponsorComponent,
+      { data:numSponsor
+      });
+      dialogRef.afterClosed().subscribe(result => {
+        this.getListSponsors();
+      });
+  }
+
+  openSuccessSnackBar(message: string) {
+    this._snackBar.open(message, '', {
+       duration: 4000,
+       horizontalPosition:'center',
+       verticalPosition:'bottom',
+       panelClass:["snackbar-success-style"]
+    });
+  }
+
+  openErrorSnackBar(message: string) {
+    this._snackBar.open(message, '', {
+       duration: 4000,
+       horizontalPosition:'center',
+       verticalPosition:'bottom',
+       panelClass:["snackbar-error-style"]
+    });
+  }
+
+  downloadExcel() {
+    this.SponsorService.getExcel().subscribe(blob => {
+      const fileName = 'Sponsors_Information.xlsx';
+      saveAs(blob, fileName);
+    });
+  }
+
+  refresh(): void {
+    window.location.reload();
+  }
+  
+  scroll(el: HTMLElement) {
+    el.scrollIntoView({behavior: 'smooth'});
+  }
+
+ 
+
+
+}
+
+
+
+

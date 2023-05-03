@@ -1,0 +1,17 @@
+<h1 mat-dialog-title style="text-align: center;font-family: Poppins, sans-serif;">Liste des participants</h1>
+<mat-dialog-content class="mat-typography">
+      <div class="row row-cols-auto">
+        <div class="col" *ngFor="let u of users;">
+          <mat-card style="margin-bottom: 8px;">
+            <mat-card-title-group>
+              <mat-card-title style="  font-size: 20px;font-family: Poppins, sans-serif;">{{ u.nom}} -{{ u.prenom}} </mat-card-title>
+              <mat-card-subtitle>{{ u.email}}</mat-card-subtitle>
+              <img mat-card-sm-image src="assets/user.png" alt="avatar" style="margin-left: 10px;">
+            </mat-card-title-group>
+            <mat-card-actions>
+              <button mat-stroked-button color="warn" style="width: 100%;" (click)="removeFromEvent(id,u.id)" >RETIRER</button>
+             </mat-card-actions>
+          </mat-card>
+        </div>
+      </div>
+</mat-dialog-content>

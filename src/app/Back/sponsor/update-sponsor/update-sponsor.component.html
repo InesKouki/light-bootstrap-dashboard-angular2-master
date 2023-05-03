@@ -1,0 +1,42 @@
+<h1 mat-dialog-title>Modifier les informations sur ce sponsor</h1>
+<mat-dialog-content class="mat-typography" style="overflow: hidden;height: 400px;">
+       <form [formGroup]="updateSponsorForm" (submit)="submit()">
+        <p><strong>Étape 1:</strong> Modifiez le titre de votre Event</p>
+
+        <mat-form-field class="form-field" appearance="outline">
+          <mat-label> Nom du sponsor</mat-label>
+          <input matInput type="text" formControlName="nomSponsor" placeholder="Entrez un nom à votre sponsor" />
+        </mat-form-field>
+
+      
+
+        <p style="margin-top: 5px"><strong>Étape 2:</strong> Modifier la description de votre sponsor</p>
+
+        <mat-form-field class="form-field" appearance="outline">
+          <mat-label> Description du sponsor</mat-label>
+          <input matInput type="text" formControlName="description" placeholder="Entrez une description" />
+        </mat-form-field>
+
+        <p style="margin-top: 5px"><strong>Étape 5:</strong> Donnez la date debut et fin du contract à votre sponsor</p>
+                              <mat-form-field appearance="fill">
+                                <mat-label>Enter a date range</mat-label>
+                                <mat-date-range-input [rangePicker]="picker">
+                                  <input matStartDate placeholder="Start date" formControlName="debutContract">
+                                  <input matEndDate placeholder="End date" formControlName="finContract">
+                                </mat-date-range-input>
+                                <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
+                                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                                <mat-date-range-picker #picker></mat-date-range-picker>
+                              </mat-form-field>
+
+        <mat-dialog-actions >
+          <button mat-raised-button color="primary" style="width: 100%;" [disabled]="updateSponsorForm.invalid" type="submit">Confirmer</button>
+
+        
+        </mat-dialog-actions>
+
+       </form>
+
+</mat-dialog-content>
+ 
+

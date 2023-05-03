@@ -1,0 +1,224 @@
+ <div class="banner-image" #myDiv>
+
+</div>
+<div class="container">
+  <br>
+  <h4>Gestion des evenement</h4>
+  <div>
+    <mat-accordion>
+      <mat-expansion-panel [expanded]="step === 0" (opened)="setStep(0)" style="margin-top: 15px;">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <mat-icon color="primary">create_new_folder</mat-icon>
+            &nbsp;
+            Créer un nouveau evenement
+          </mat-panel-title>
+          <mat-panel-description>
+
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        <form [formGroup]="newForm" (submit)="submit()" #formDirective1="ngForm">
+                    
+                            <p><strong>Étape 1:</strong> Donnez un nom à votre evenement</p>
+                    
+                              <mat-form-field class="form-field" appearance="outline">
+                                <mat-label> Nom de l'evenement</mat-label>
+                                <input matInput type="text" formControlName="nomEvent" placeholder="Entrez un titre" />
+                              </mat-form-field>
+                    
+                              <p style="margin-top: 5px"><strong>Étape 2:</strong> Donnez une description à votre evenement</p>
+                    
+                              <mat-form-field class="form-field" appearance="outline">
+                                <mat-label> Description de l'evenement</mat-label>
+                                <input matInput type="text" formControlName="description" placeholder="Entrez une description" />
+                              </mat-form-field>
+                              <p style="margin-top: 5px"><strong>Étape 3:</strong> Donnez une un nombre de place à votre evenement</p>
+                              <mat-form-field class="form-field" appearance="outline">
+                                <mat-label> Nombre de place de l'evenement</mat-label>
+                                <input matInput type="text" formControlName="nbrPlace" placeholder="Entrez le nombre de place" />
+                              </mat-form-field>
+                              <p style="margin-top: 5px"><strong>Étape 4:</strong> Donnez un prix à votre evenement</p>
+                              <mat-form-field class="form-field" appearance="outline">
+                                <mat-label> Prix de l'evenement</mat-label>
+                                <input matInput type="text" formControlName="prix" placeholder="Entrez le prix" />
+                              </mat-form-field>
+
+                              <p style="margin-top: 5px"><strong>Étape 5:</strong> Ajoutez une photo pour le sponsor</p>
+    
+                                <div class="form-group">
+                                    <label class="btn btn-outline-primary btn-file">
+                                        <mat-icon>add_photo_alternate</mat-icon> Sélectionner une photo
+                                        <input type="file" formControlName="fileName" (change)="onFileSelected($event)" style="display: none;"  accept="image/*" #fileInput>
+                                    </label>
+                                    <span class="badge badge-pill badge-secondary">{{ userFile?.name }}</span>
+                                   
+                                </div>
+
+                              <p style="margin-top: 5px"><strong>Étape 6:</strong> Donnez un interval de temps à votre evenement</p>
+                              <mat-form-field appearance="fill">
+                                <mat-label>Enter a date range</mat-label>
+                                <mat-date-range-input [rangePicker]="picker">
+                                  <input matStartDate placeholder="Start date" formControlName="dateDebut">
+                                  <input matEndDate placeholder="End date" formControlName="dateFin">
+                                </mat-date-range-input>
+                                <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
+                                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                                <mat-date-range-picker #picker></mat-date-range-picker>
+                              </mat-form-field>
+                              <p style="margin-top: 5px"><strong></strong></p>
+                    
+                    
+                              <button mat-raised-button color="primary" type="submit" [disabled]="newForm.invalid"
+                                style="margin-top: 5px;">Confirmer</button>
+                            </form>
+
+      </mat-expansion-panel>
+
+
+
+         <mat-expansion-panel style="margin-top: 15px;" [expanded]="step === 2" (opened)="setStep(2)">
+        <mat-expansion-panel-header>
+           <mat-panel-title>
+            <mat-icon color="primary">attach_money</mat-icon>
+            &nbsp;
+            Assign a sponsor to an event
+           </mat-panel-title>
+           <mat-panel-description>
+           </mat-panel-description>
+         </mat-expansion-panel-header>
+           <p><strong>Étape 1 :</strong>Choose the even</p>
+           <form [formGroup]="assignToEventForm" (submit)="submitAssignToEvent()" #formDirective3="ngForm">
+
+              <mat-form-field appearance="fill">
+                <mat-label>Event</mat-label>
+                <mat-select formControlName="selectEvent"  (selectionChange)="onEventChange()" required>
+                  <mat-option value="0" disabled>Choisissez un Event</mat-option>
+                  <mat-option *ngFor="let e of events" [value]="e.numEvent">{{e.nomEvent}} </mat-option>
+                </mat-select>
+              </mat-form-field>
+
+              <p style="margin-top: 5px"><strong>Étape 2 :</strong> Choisir quel sponsor à ajouter à cet event</p>
+
+              <mat-form-field appearance="fill">
+                <mat-label>Sponsors</mat-label>
+                <mat-select formControlName="selectSponsors" multiple required>
+                  <mat-option value="0" disabled>Choisissez un sponsor</mat-option>
+                  <mat-option *ngFor="let s of nonSponsors" [value]="s.numSponsor">{{s.nomSponsor}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+
+               <button mat-raised-button color="primary" type="submit" [disabled]="assignToEventForm.invalid" style="margin-top: 5px;">Confirmer</button>
+             </form>
+
+       </mat-expansion-panel> 
+    </mat-accordion> 
+
+  </div>
+  <br>
+  <mat-divider></mat-divider>
+  <br>
+  <h4>La liste des evenement</h4>
+  <mat-form-field appearance="outline">
+    <mat-label>Chercher un evenement</mat-label>
+    <input matInput (keyup)="applyFilter($event)" placeholder="Ex: event1" #input>
+    <mat-icon matSuffix>search</mat-icon>
+  </mat-form-field>
+  <div class="mat-elevation-z2">
+    <table mat-table [dataSource]="dataSource" aria-describedby="tableDescription" matSort 
+      style="margin-left: auto;margin-right: auto;width: 100%;" #table>
+
+
+      <ng-container matColumnDef="nomEvent">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Event Name</th>
+        <td mat-cell *matCellDef="let row"> {{row.nomEvent}} </td>
+      </ng-container>
+
+
+      <ng-container matColumnDef="description">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Description </th>
+        <td mat-cell *matCellDef="let row"> {{row.description}} </td>
+      </ng-container>
+
+
+      <ng-container matColumnDef="dateDebut">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Start Date </th>
+        <td mat-cell *matCellDef="let row"> {{row.dateDebut}} </td>
+      </ng-container>
+
+
+      <ng-container matColumnDef="dateFin">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> End Date </th>
+        <td mat-cell *matCellDef="let row"> {{row.dateFin}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="nbrPlace">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Nombre de place </th>
+        <td mat-cell *matCellDef="let row"> {{row.nbrPlace}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="prix">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Price </th>
+        <td mat-cell *matCellDef="let row"> {{row.prix}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="imageFile">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Image File </th>
+        <td mat-cell *matCellDef="let row"><img class="card-img-top img-responsive" [src]="BASE_URL + 'ImgAsso/' + row.numEvent" style="height: 50px; width: 100px" alt="">
+        </td> 
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Actions </th>
+        <td mat-cell *matCellDef="let row">
+
+           <button mat-icon-button
+         matTooltip="Afficher les sponsors" (click)="openDialogSponsors(row.numEvent)"
+         color="primary"
+         [disabled]="!hasSponsors(row.numEvent)">
+            <mat-icon>attach_money</mat-icon>
+        </button>   
+
+        <button mat-icon-button
+         matTooltip="Afficher les participants" (click)="openDialogParticipant(row.numEvent)"
+         color="primary"
+         [disabled]="!hasParticipant(row.numEvent)">
+            <mat-icon>supervised_user_circle</mat-icon>
+        </button> 
+
+        <button mat-icon-button
+         matTooltip="Imprimer PDF" (click)="downloadPDF(row.numEvent)"
+         color="primary"
+         [disabled]="!hasParticipant(row.numEvent)">
+            <mat-icon> picture_as_pdf</mat-icon>
+          
+        </button> 
+        
+       
+       <button mat-icon-button matTooltip="Update event" (click)="openDialogUpdateEvent(row.numEvent)" color="primary">
+         <mat-icon>edit</mat-icon>
+      </button>
+
+
+
+          <button mat-icon-button matTooltip="Delete event" color="warn" (click)="deleteEvent(row.numEvent)">
+            <mat-icon>delete_forever</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+
+      <tr class="mat-row" *matNoDataRow>
+        <td class="mat-cell" colspan="4">Aucun evenement ne rassemble à "{{input.value}}"</td>
+      </tr>
+    </table>
+
+    <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of events"></mat-paginator>
+  </div>
+  <br>
+  <mat-divider></mat-divider>
+</div> 

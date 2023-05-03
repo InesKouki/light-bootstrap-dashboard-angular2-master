@@ -1,0 +1,28 @@
+.status-true {
+    color: green;
+  }
+  
+  .status-false {
+    color: red;
+  }
+  .custom-btn {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #f7b731;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16);
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .custom-btn:hover {
+    background-color: #e8a31d;
+  }
+  
+  .btn-text {
+    font-size: 18px;
+    font-weight: bold;
+  }
+  

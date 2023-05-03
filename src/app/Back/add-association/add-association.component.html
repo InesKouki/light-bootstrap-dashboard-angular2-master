@@ -1,0 +1,135 @@
+<div class="banner-image" #myDiv>
+
+</div>
+<div class="container">
+  <br>
+  <h4>Gestion des sponsors</h4>
+  <div>
+<mat-accordion>
+  <mat-expansion-panel [expanded]="step === 0" (opened)="setStep(0)" style="margin-top: 15px;">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        <mat-icon color="primary">create_new_folder</mat-icon>
+        &nbsp;
+        Ajouter un nouveau sponsor
+      </mat-panel-title>
+      <mat-panel-description>
+
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+    <form [formGroup]="newForm" (submit)="submit()" #formDirective1="ngForm">
+                
+                        <p><strong>Étape 1:</strong> Donnez un nom à votre Association</p>
+                
+                          <mat-form-field class="form-field" appearance="outline">
+                            <mat-label> Nom du association</mat-label>
+                            <input matInput type="text" formControlName="nom" placeholder="Entrez un nom" />
+                          </mat-form-field>
+                
+                          <p style="margin-top: 5px"><strong>Étape 2:</strong> Donnez une description à votre evenement</p>
+                
+                          <mat-form-field class="form-field" appearance="outline">
+                            <mat-label> Adresse du Association</mat-label>
+                            <input matInput type="text" formControlName="adresse" placeholder="Entrez une adresse" />
+                          </mat-form-field>
+                          <p style="margin-top: 5px"><strong>Étape 2:</strong> Donnez une description à votre evenement</p>
+                
+                          <mat-form-field class="form-field" appearance="outline">
+                            <mat-label> mail du Association</mat-label>
+                            <input matInput type="text" formControlName="mail" placeholder="Entrez une mail" />
+                          </mat-form-field>
+                          <p style="margin-top: 5px"><strong>Étape 2:</strong> Donnez une description à votre evenement</p>
+                
+                          <mat-form-field class="form-field" appearance="outline">
+                            <mat-label> tel du Association</mat-label>
+                            <input matInput type="text" formControlName="tel" placeholder="Entrez un numero de telephone" />
+                          </mat-form-field>
+
+                          <p style="margin-top: 5px"><strong>Étape 3:</strong> Ajoutez une photo pour l'association</p>
+
+                            <div class="form-group">
+                                <label class="btn btn-outline-primary btn-file">
+                                    <mat-icon>add_photo_alternate</mat-icon> Sélectionner une photo
+                                    <input type="file" formControlName="imageFileName" (change)="onFileSelected($event)" style="display: none;"  accept="image/*" #fileInput>
+                                </label>
+                                <span class="badge badge-pill badge-secondary">{{ userFile?.name }}</span>
+                               
+                            </div>
+                         
+                          <p style="margin-top: 5px"><strong></strong></p>
+                  
+                          <button mat-raised-button color="primary" type="submit" [disabled]="newForm.invalid"
+                            style="margin-top: 5px;">Confirmer</button>
+                        </form>
+  </mat-expansion-panel>
+</mat-accordion>
+</div>
+<br>
+<mat-divider></mat-divider>
+<br>
+<h4>La liste des sponsors</h4>
+<mat-form-field appearance="outline">
+  <mat-label>Chercher un sponsor</mat-label>
+  <input matInput  placeholder="Ex: sponsor1" #input>
+  <mat-icon matSuffix>search</mat-icon>
+</mat-form-field>
+<div class="mat-elevation-z2">
+
+<table mat-table [dataSource]="dataSource" aria-describedby="tableDescription" matSort 
+                              style="margin-left: auto;margin-right: auto;width: 100%;" #table>
+                        
+                        
+                              <ng-container matColumnDef="nom">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header> Event Name</th>
+                                <td mat-cell *matCellDef="let row"> {{row.nom}} </td>
+                              </ng-container>
+                        
+                        
+                              <ng-container matColumnDef="adresse">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header> Address </th>
+                                <td mat-cell *matCellDef="let row"> {{row.adresse}} </td>
+                              </ng-container>
+                        
+                        
+                              <ng-container matColumnDef="mail">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header> Mail </th>
+                                <td mat-cell *matCellDef="let row"> {{row.mail}} </td>
+                              </ng-container>
+                        
+                        
+                              <ng-container matColumnDef="tel">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header> Telephone </th>
+                                <td mat-cell *matCellDef="let row"> {{row.tel}} </td>
+                              </ng-container>
+                              <ng-container matColumnDef="imageFileName">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header> Image File </th>
+                                <td mat-cell *matCellDef="let row"><img class="card-img-top img-responsive" [src]=" BASE_URL + 'ImgAsso/' + row.id" style="height: 50px; width: 100px" alt="">
+                               </td> 
+                              </ng-container>
+                        
+                        
+                              <ng-container matColumnDef="actions">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header> Actions </th>
+                                <td mat-cell *matCellDef="let row">
+                              <button mat-icon-button matTooltip="Update event" (click)="openDialogUpdateAssociation(this.row.id)" color="primary">
+                                 <mat-icon>edit</mat-icon>
+                              </button>
+                        
+                        
+                        
+                              <button mat-icon-button matTooltip="Delete event" color="warn" class="custom-style" (click)="deleteAssociation(row.numEvent)">
+                                <mat-icon>delete_forever</mat-icon>
+                              </button>
+                                </td>
+                              </ng-container>
+            
+                              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                              <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                       
+                            </table>
+
+                            <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of sponsors"></mat-paginator>
+                          </div>
+                          <br>
+                          <mat-divider></mat-divider>
+                        </div> 
